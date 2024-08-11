@@ -30,6 +30,11 @@ class LocalAuthServices {
     }
   }
 
+  void isEmailRegistered(String email)
+  {
+    
+  }
+
   User? getCurrentUser()
    {
     User? user =  firebaseAuth.currentUser;

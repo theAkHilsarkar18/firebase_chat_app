@@ -1,5 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_chat_app/main.dart';
+import 'package:firebase_chat_app/model/user_model.dart';
 import 'package:firebase_chat_app/screens/auth/components/my_text_fields.dart';
+import 'package:firebase_chat_app/services/add_user_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -62,8 +65,25 @@ class SignUpPage extends StatelessWidget {
                       String status = await LocalAuthServices.localAuthServices
                           .createAccountWithEmailAandPassword(
                               txtEmail.text, txtPassword.text);
+                      User? user =
+                          LocalAuthServices.localAuthServices.getCurrentUser();
 
-                      if (status == "success") {
+                      if (status == "success" && user != null) {
+                        Map m1 = {
+                          'uId': user.uid,
+                          'name': txtName.text,
+                          'email': txtEmail.text,
+                          'image':
+                              "https://imagedelivery.net/xE-VtsYZUS2Y8MtLMcbXAg/4f1eb366cecf8f69f61c/sm",
+                          'token': txtEmail.text,
+                          'phone': txtPhone.text,
+                          'password': txtPassword.text,
+                        };
+                        UserModel userModel = UserModel.fromMap(m1);
+
+                        await AddUserServices.addUserServices
+                            .addUserInFirestore(userModel);
+
                         Get.back();
                       } else {
                         Get.snackbar(

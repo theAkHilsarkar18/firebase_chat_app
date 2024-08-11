@@ -1,4 +1,6 @@
 import 'package:firebase_chat_app/controllers/home_controller.dart';
+import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
+import 'package:firebase_chat_app/screens/home/components/static_user_list.dart';
 import 'package:firebase_chat_app/services/google_auth_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
 import 'package:flutter/material.dart';
@@ -13,21 +15,62 @@ class HomePage extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         drawer: Drawer(
-          width: 300,
-          child: Obx(
-            () => Column(
-              children: [
-                DrawerHeader(
-                  child: CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(
-                      controller.userPhotoUrl.value,
+          width: 250,
+          child: Container(
+            width: 250,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(
+                  'assets/img/drawer.jpeg',
+                ),
+              ),
+            ),
+            child: Obx(
+              () => Column(
+                children: [
+                  DrawerHeader(
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: NetworkImage(
+                        controller.userPhotoUrl.value,
+                      ),
                     ),
                   ),
-                ),
-                Text(controller.userName.value),
-                Text(controller.userEmail.value),
-              ],
+                  ListTile(
+                    leading: const Icon(
+                      Icons.person,
+                      color: Colors.white,
+                    ),
+                    title: Text(
+                      controller.userName.value,
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.email,
+                      color: Colors.white,
+                    ),
+                    title: Text(
+                      controller.userEmail.value,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(
+                      Icons.call,
+                      color: Colors.white,
+                    ),
+                    title: Text(
+                      controller.userPhone.value,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(color: Colors.white, fontSize: 15),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -44,6 +87,7 @@ class HomePage extends StatelessWidget {
                       null) {
                     Get.offAndToNamed('/signIn');
                   }
+                  controller.clearUserListForLogOut();
                 },
                 icon: const Icon(Icons.logout))
           ],
@@ -55,9 +99,8 @@ class HomePage extends StatelessWidget {
               image: AssetImage('assets/img/homeBg.jpg'),
             ),
           ),
-          // child: const Column(
-          //   children: [],
-          // ),
+          // child: StaticUserList(controller: controller),
+          child: LiveUserList(),
         ),
       ),
     );

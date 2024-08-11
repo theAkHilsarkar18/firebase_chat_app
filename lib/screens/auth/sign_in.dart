@@ -1,4 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_chat_app/model/user_model.dart';
 import 'package:firebase_chat_app/screens/auth/components/my_text_fields.dart';
+import 'package:firebase_chat_app/services/add_user_services.dart';
 import 'package:firebase_chat_app/services/google_auth_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
 import 'package:flutter/material.dart';
@@ -82,9 +85,29 @@ class SignInPage extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: SignInButton(Buttons.google, onPressed: () async {
                 await GoogleAuthServices.googleAuthServices.signWithGoogle();
-                if (LocalAuthServices.localAuthServices.getCurrentUser() !=
-                    null) {
-                  Get.offAndToNamed('/home');
+
+                User? user =
+                    LocalAuthServices.localAuthServices.getCurrentUser();
+                if (user != null) {
+                  Map m1 = {
+                    'uId': user.uid,
+                    'name': user.displayName,
+                    'email': user.email,
+                    'image': user.photoURL,
+                    'token': user.email,
+                    'phone': user.phoneNumber ?? '+91 98254 8XXXX',
+                    'password': 'PASSWORD',
+                  };
+                  UserModel userModel = UserModel.fromMap(m1);
+
+                  String status = await AddUserServices.addUserServices
+                      .addUserInFirestore(userModel);
+
+                  if (status == "success") {
+                    Get.offAndToNamed('/home');
+                  } else {
+                    Get.snackbar("User not added !", status);
+                  }
                 }
               }),
             ),

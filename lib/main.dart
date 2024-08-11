@@ -2,6 +2,7 @@ import 'package:firebase_chat_app/firebase_options.dart';
 import 'package:firebase_chat_app/screens/auth/auth_manager.dart';
 import 'package:firebase_chat_app/screens/auth/sign_in.dart';
 import 'package:firebase_chat_app/screens/auth/sign_up.dart';
+import 'package:firebase_chat_app/screens/chat/chat_page.dart';
 import 'package:firebase_chat_app/screens/home/home_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,10 @@ class ChatApp extends StatelessWidget {
         GetPage(
           name: '/home',
           page: () => const HomePage(),
+        ),
+        GetPage(
+          name: '/chat',
+          page: () => const ChatPage(),
         ),
       ],
     );
