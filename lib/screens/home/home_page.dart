@@ -1,3 +1,4 @@
+import 'package:firebase_chat_app/controllers/chat_controller.dart';
 import 'package:firebase_chat_app/controllers/home_controller.dart';
 import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
 import 'package:firebase_chat_app/screens/home/components/static_user_list.dart';

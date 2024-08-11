@@ -1,20 +1,33 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/controllers/chat_controller.dart';
+import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
+import 'package:firebase_chat_app/services/chat_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../../model/chat_model.dart';
 
 class ChatPage extends StatelessWidget {
   const ChatPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var controller = Get.put(ChatController());
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
-          title: const Text('Chat Page'),
+          title: Obx(
+            () => Text(
+              chatController.receiverName.value,
+              style: const TextStyle(fontSize: 15),
+            ),
+          ),
           actions: [
+            CircleAvatar(
+              radius: 19,
+              backgroundImage: NetworkImage(chatController.receiverPhoto.value),
+            ),
             IconButton(
                 onPressed: () async {},
                 icon: const Icon(
@@ -37,32 +50,59 @@ class ChatPage extends StatelessWidget {
                 height: 50,
               ),
               Expanded(
-                child: Obx(
-                  () => Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: List.generate(
-                      controller.chatList.length,
-                      (index) => Container(
-                        // width: 250,
-                        margin: const EdgeInsets.all(8),
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 15, vertical: 8),
-                        decoration: const BoxDecoration(
-                          color: Colors.black26,
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(10),
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                          ),
-                        ),
-                        child: Text(
-                          controller.chatList[index],
-                          softWrap: true,
-                          style: const TextStyle(color: Colors.white),
+                child: StreamBuilder(
+                  stream: ChatServices.chatServices
+                      .getChatList(chatController.receiverEmail.value),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    }
+
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    List<Chat> chatList = snapshot.data!.docs
+                        .map(
+                          (e) => Chat.fromMap(e.data()),
+                        )
+                        .toList();
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: List.generate(
+                        chatList.length,
+                        (index) => Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            Flexible(
+                              child: Container(
+                                // width: 250,
+                                margin: const EdgeInsets.only(
+                                    left: 50, top: 8, bottom: 8, right: 8),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 15, vertical: 8),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white12,
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(10),
+                                    topLeft: Radius.circular(10),
+                                    topRight: Radius.circular(10),
+                                  ),
+                                ),
+                                child: Text(
+                                  chatList[index].message,
+                                  softWrap: true,
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
               Container(
@@ -86,8 +126,18 @@ class ChatPage extends StatelessWidget {
                           Colors.black26,
                         ),
                       ),
-                      onPressed: () {
-                        controller.sendChat(txtChat.text);
+                      onPressed: () async {
+                        chatController.sendChat(txtChat.text);
+
+                        Chat chat = Chat.fromMap({
+                          'sender': chatController.sender.value,
+                          'receiver': chatController.receiverEmail.value,
+                          'message': txtChat.text,
+                          'timestamp': Timestamp.now(),
+                        });
+
+                        await ChatServices.chatServices
+                            .addChatToFirestore(chat);
                         txtChat.clear();
                       },
                       icon: const Icon(
