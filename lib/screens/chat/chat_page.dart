@@ -38,14 +38,28 @@ class ChatPage extends StatelessWidget {
               ),
               Expanded(
                 child: Obx(
-                  () => Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: List.generate(
-                        controller.chatList.length,
-                        (index) =>
-                            ListTile(trailing: Text(controller.chatList[index])),
+                  () => Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: List.generate(
+                      controller.chatList.length,
+                      (index) => Container(
+                        // width: 250,
+                        margin: const EdgeInsets.all(8),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 8),
+                        decoration: const BoxDecoration(
+                          color: Colors.black26,
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(10),
+                            topLeft: Radius.circular(10),
+                            topRight: Radius.circular(10),
+                          ),
+                        ),
+                        child: Text(
+                          controller.chatList[index],
+                          softWrap: true,
+                          style: const TextStyle(color: Colors.white),
+                        ),
                       ),
                     ),
                   ),
@@ -54,7 +68,7 @@ class ChatPage extends StatelessWidget {
               Container(
                 margin:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                padding: const EdgeInsets.only(left: 20, top: 5),
+                padding: const EdgeInsets.only(left: 20),
                 decoration: BoxDecoration(
                   color: Colors.white12,
                   borderRadius: BorderRadius.circular(50),
@@ -74,6 +88,7 @@ class ChatPage extends StatelessWidget {
                       ),
                       onPressed: () {
                         controller.sendChat(txtChat.text);
+                        txtChat.clear();
                       },
                       icon: const Icon(
                         Icons.arrow_forward,
