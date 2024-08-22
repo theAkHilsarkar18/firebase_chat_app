@@ -23,10 +23,11 @@ class GetUserServices {
     return userData;
   }
 
-  Stream<QuerySnapshot<Object?>> getLiveUserList() {
+  Stream<QuerySnapshot<Object?>> getLiveUserList(String currentUser) {
     final CollectionReference userCollection =
         firebaseFirestore.collection("users");
-    final Stream<QuerySnapshot> snapshot = userCollection.snapshots();
+    final Stream<QuerySnapshot> snapshot =
+        userCollection.where('email', isNotEqualTo: currentUser).snapshots();
     return snapshot;
   }
 

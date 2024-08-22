@@ -51,11 +51,19 @@ class ChatPage extends StatelessWidget {
               ),
               Expanded(
                 child: StreamBuilder(
-                  stream: ChatServices.chatServices
-                      .getChatList(chatController.receiverEmail.value),
+                  stream: ChatServices.chatServices.getChatList(
+                      chatController.receiverEmail.value,
+                      chatController.sender.value),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) {
-                      return Center(child: Text('Error: ${snapshot.error}'));
+                      return Center(
+                          child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Error: ${snapshot.error}',
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      ));
                     }
 
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -69,36 +77,61 @@ class ChatPage extends StatelessWidget {
                           (e) => Chat.fromMap(e.data()),
                         )
                         .toList();
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: List.generate(
-                        chatList.length,
-                        (index) => Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Flexible(
-                              child: Container(
-                                // width: 250,
-                                margin: const EdgeInsets.only(
-                                    left: 50, top: 8, bottom: 8, right: 8),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 8),
-                                decoration: const BoxDecoration(
-                                  color: Colors.white12,
-                                  borderRadius: BorderRadius.only(
-                                    bottomLeft: Radius.circular(10),
-                                    topLeft: Radius.circular(10),
-                                    topRight: Radius.circular(10),
+
+                    return SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: List.generate(
+                          chatList.length,
+                          (index) => Row(
+                            mainAxisAlignment: (chatList[index].sender ==
+                                    chatController.sender.value)
+                                ? MainAxisAlignment.end
+                                : MainAxisAlignment.start,
+                            children: [
+                              Flexible(
+                                child: GestureDetector(
+                                  onDoubleTap: () {
+                                    ChatServices.chatServices.deleteChat(
+                                        chatController.sender.value,
+                                        chatController.receiverEmail.value);
+                                  },
+                                  child: Container(
+                                    // width: 250,
+                                    margin: EdgeInsets.only(
+                                        left: (chatList[index].sender ==
+                                                chatController
+                                                    .receiverEmail.value)
+                                            ? 8
+                                            : 50,
+                                        top: 8,
+                                        bottom: 8,
+                                        right: (chatList[index].sender ==
+                                                chatController
+                                                    .receiverEmail.value)
+                                            ? 50
+                                            : 8),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 8),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white12,
+                                      borderRadius: BorderRadius.only(
+                                        bottomLeft: Radius.circular(10),
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      chatList[index].message,
+                                      softWrap: true,
+                                      style:
+                                          const TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ),
-                                child: Text(
-                                  chatList[index].message,
-                                  softWrap: true,
-                                  style: const TextStyle(color: Colors.white),
-                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     );
@@ -136,8 +169,10 @@ class ChatPage extends StatelessWidget {
                           'timestamp': Timestamp.now(),
                         });
 
-                        await ChatServices.chatServices
-                            .addChatToFirestore(chat);
+                        await ChatServices.chatServices.addChatToFirestore(
+                            chat,
+                            chatController.sender.value,
+                            chatController.receiverEmail.value);
                         txtChat.clear();
                       },
                       icon: const Icon(

@@ -1,5 +1,6 @@
 import 'package:firebase_chat_app/model/user_model.dart';
 import 'package:firebase_chat_app/services/get_user_services.dart';
+import 'package:firebase_chat_app/services/local_auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +15,8 @@ class LiveUserList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: GetUserServices.getUserServices.getLiveUserList(),
+      stream: GetUserServices.getUserServices.getLiveUserList(
+          LocalAuthServices.localAuthServices.getCurrentUser()!.email!),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return Center(child: Text('Error: ${snapshot.error}'));
