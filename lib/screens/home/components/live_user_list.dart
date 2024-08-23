@@ -1,6 +1,7 @@
 import 'package:firebase_chat_app/model/user_model.dart';
 import 'package:firebase_chat_app/services/get_user_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
+import 'package:firebase_chat_app/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,8 @@ class LiveUserList extends StatelessWidget {
           itemBuilder: (context, index) => GestureDetector(
             onTap: () {
               chatController.getSenderAndReceiver(userList[index]);
+              NotificationServices.notificationServices
+                  .displaySimpleNotification();
               Get.toNamed('/chat');
             },
             child: ListTile(

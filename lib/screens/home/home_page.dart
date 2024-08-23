@@ -4,6 +4,7 @@ import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
 import 'package:firebase_chat_app/screens/home/components/static_user_list.dart';
 import 'package:firebase_chat_app/services/google_auth_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
+import 'package:firebase_chat_app/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -17,60 +18,69 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         drawer: Drawer(
           width: 250,
-          child: Container(
-            width: 250,
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                  'assets/img/drawer.jpeg',
+          child: GestureDetector(
+            onTap: () {
+              NotificationServices.notificationServices
+                  .displaySimpleNotification();
+            },
+            child: Container(
+              width: 250,
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    'assets/img/drawer.jpeg',
+                  ),
                 ),
               ),
-            ),
-            child: Obx(
-              () => Column(
-                children: [
-                  DrawerHeader(
-                    child: CircleAvatar(
-                      radius: 50,
-                      backgroundImage: NetworkImage(
-                        controller.userPhotoUrl.value,
+              child: Obx(
+                () => Column(
+                  children: [
+                    DrawerHeader(
+                      child: CircleAvatar(
+                        radius: 50,
+                        backgroundImage: NetworkImage(
+                          controller.userPhotoUrl.value,
+                        ),
                       ),
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.person,
-                      color: Colors.white,
+                    ListTile(
+                      leading: const Icon(
+                        Icons.person,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        controller.userName.value,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15),
+                      ),
                     ),
-                    title: Text(
-                      controller.userName.value,
-                      style: const TextStyle(color: Colors.white, fontSize: 15),
+                    ListTile(
+                      leading: const Icon(
+                        Icons.email,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        controller.userEmail.value,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15),
+                      ),
                     ),
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.email,
-                      color: Colors.white,
+                    ListTile(
+                      leading: const Icon(
+                        Icons.call,
+                        color: Colors.white,
+                      ),
+                      title: Text(
+                        controller.userPhone.value,
+                        overflow: TextOverflow.ellipsis,
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 15),
+                      ),
                     ),
-                    title: Text(
-                      controller.userEmail.value,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                  ),
-                  ListTile(
-                    leading: const Icon(
-                      Icons.call,
-                      color: Colors.white,
-                    ),
-                    title: Text(
-                      controller.userPhone.value,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(color: Colors.white, fontSize: 15),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
