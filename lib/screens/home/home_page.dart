@@ -4,6 +4,7 @@ import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
 import 'package:firebase_chat_app/screens/home/components/static_user_list.dart';
 import 'package:firebase_chat_app/services/google_auth_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
+import 'package:firebase_chat_app/services/notification_helper.dart';
 import 'package:firebase_chat_app/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -20,8 +21,7 @@ class HomePage extends StatelessWidget {
           width: 250,
           child: GestureDetector(
             onTap: () {
-              NotificationServices.notificationServices
-                  .displaySimpleNotification();
+              NotificationHelper.notificationHelper.showNotification();
             },
             child: Container(
               width: 250,
