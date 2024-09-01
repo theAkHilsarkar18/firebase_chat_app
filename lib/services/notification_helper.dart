@@ -4,13 +4,14 @@ import 'package:timezone/timezone.dart';
 
 class NotificationHelper {
   NotificationHelper._();
+
   static NotificationHelper notificationHelper = NotificationHelper._();
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
   static AndroidNotificationChannel channel = const AndroidNotificationChannel(
-    "Channel_id",
-    "Channel_title",
+    "Chat-App",
+    "A message from Chat App",
     importance: Importance.high,
     playSound: true,
   );
@@ -41,16 +42,17 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
-  void showNotification() {
+  void showNotification(String title, String body) {
     flutterLocalNotificationsPlugin.show(
       0,
-      'Notification Title',
-      'Notification Body',
+      title,
+      body,
       const NotificationDetails(
         android: AndroidNotificationDetails(
-          '0',
-          '0',
-          channelDescription: 'channel description',
+          'chat1',
+          'Simple Chat Message',
+          channelDescription:
+              'By enabling this channel you can get simple local notifications',
           importance: Importance.max,
           priority: Priority.high,
         ),
@@ -64,14 +66,14 @@ class NotificationHelper {
     var location = getLocation('Asia/Kolkata');
     var now = TZDateTime.now(location).add(const Duration(seconds: 5));
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      0,
+      1,
       'Scheduled Title',
       'Scheduled Body',
       now,
       const NotificationDetails(
         android: AndroidNotificationDetails(
-          '0',
-          '0',
+          'chat-schedule1',
+          'schedule Simple Chat Message',
           channelDescription: 'channel description',
           importance: Importance.max,
           priority: Priority.high,

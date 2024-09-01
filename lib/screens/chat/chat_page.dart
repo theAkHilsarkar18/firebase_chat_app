@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/controllers/chat_controller.dart';
 import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
 import 'package:firebase_chat_app/services/chat_services.dart';
+import 'package:firebase_chat_app/services/notification_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -161,7 +162,6 @@ class ChatPage extends StatelessWidget {
                       ),
                       onPressed: () async {
                         chatController.sendChat(txtChat.text);
-
                         Chat chat = Chat.fromMap({
                           'sender': chatController.sender.value,
                           'receiver': chatController.receiverEmail.value,
@@ -173,6 +173,8 @@ class ChatPage extends StatelessWidget {
                             chat,
                             chatController.sender.value,
                             chatController.receiverEmail.value);
+                        NotificationHelper.notificationHelper.showNotification(
+                            chatController.sender.value, txtChat.text);
                         txtChat.clear();
                       },
                       icon: const Icon(

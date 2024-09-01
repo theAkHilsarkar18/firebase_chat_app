@@ -8,6 +8,7 @@ import 'package:firebase_chat_app/screens/chat/chat_page.dart';
 import 'package:firebase_chat_app/screens/home/home_page.dart';
 import 'package:firebase_chat_app/services/notification_helper.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -21,7 +22,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
+  await FirebaseMessaging.instance.getInitialMessage();
   runApp(const ChatApp());
 }
 

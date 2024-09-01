@@ -1,5 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_chat_app/model/user_model.dart';
+import 'package:firebase_chat_app/services/add_user_services.dart';
+import 'package:firebase_chat_app/services/firebase_messaging_services.dart';
 import 'package:firebase_chat_app/services/get_user_services.dart';
 import 'package:firebase_chat_app/services/local_auth_services.dart';
 import 'package:firebase_chat_app/services/notification_services.dart';
@@ -20,6 +22,8 @@ class HomeController extends GetxController {
     super.onInit();
     NotificationServices.notificationServices.initNotificationSetting();
     getUserDetail();
+    AddUserServices.addUserServices.setTokenInUser();
+    FirebaseMessagingServices.firebaseMessagingServices.onMessageListener();
     // getUserData();
   }
 

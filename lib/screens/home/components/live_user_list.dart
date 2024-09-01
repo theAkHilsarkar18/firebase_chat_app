@@ -42,7 +42,7 @@ class LiveUserList extends StatelessWidget {
               chatController.getSenderAndReceiver(userList[index]);
               // NotificationServices.notificationServices
               //     .displaySimpleNotification();
-              NotificationHelper.notificationHelper.showScheduledNotification();
+
               Get.toNamed('/chat');
             },
             child: ListTile(
