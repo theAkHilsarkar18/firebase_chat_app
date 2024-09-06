@@ -7,7 +7,9 @@ class GetServerToken {
   GetServerToken._();
   static final GetServerToken instance = GetServerToken._();
 
-  Future<void> getServerToken() async {
+
+  // This server token update every hour as per internet info..
+  Future<String?> getServerToken() async {
     final scopes = ['https://www.googleapis.com/auth/firebase.messaging'];
     final json = jsonEncode(privateKey);
     final clientCredentials = ServiceAccountCredentials.fromJson(json);
@@ -15,8 +17,10 @@ class GetServerToken {
     try {
       final serverToken = client.credentials.accessToken.data;
       log("Server token: \n\n$serverToken  \n\n|");
+      return serverToken;
     } catch (e) {
       log("Server token error: $e");
+      return null;
     }
   }
 }

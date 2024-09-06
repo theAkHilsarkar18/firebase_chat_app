@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'package:firebase_chat_app/services/get_servert_token.dart';
 import 'package:http/http.dart' as http;
 
 class ApiServices {
@@ -26,7 +27,7 @@ class ApiServices {
       Uri.parse(baseUrl),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer $serverKey',
+        'Authorization': 'Bearer ${GetServerToken.instance.getServerToken()}}',
       },
       body: dataNotification,
     );
