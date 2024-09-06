@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/controllers/chat_controller.dart';
 import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
+import 'package:firebase_chat_app/services/api_services.dart';
 import 'package:firebase_chat_app/services/chat_services.dart';
 import 'package:firebase_chat_app/services/notification_helper.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +16,7 @@ class ChatPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("receiver token is ${chatController.receiverToken.value}");
     return SafeArea(
       child: Scaffold(
         extendBodyBehindAppBar: true,
@@ -173,8 +177,12 @@ class ChatPage extends StatelessWidget {
                             chat,
                             chatController.sender.value,
                             chatController.receiverEmail.value);
-                        NotificationHelper.notificationHelper.showNotification(
-                            chatController.sender.value, txtChat.text);
+                        // NotificationHelper.notificationHelper.showNotification(
+                        //     chatController.sender.value, txtChat.text);
+                        ApiServices.apiServices.pushNotification(
+                            title: chatController.sender.value,
+                            body: txtChat.text,
+                            token: chatController.receiverToken.value);
                         txtChat.clear();
                       },
                       icon: const Icon(

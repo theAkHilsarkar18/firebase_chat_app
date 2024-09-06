@@ -9,6 +9,7 @@ class ChatController extends GetxController {
   RxString receiverEmail = ''.obs;
   RxString receiverPhoto = ''.obs;
   RxString receiverName = ''.obs;
+  RxString receiverToken = ''.obs;
 
   void getSenderAndReceiver(UserModel receiver) {
     User? user = LocalAuthServices.localAuthServices.getCurrentUser();
@@ -16,6 +17,7 @@ class ChatController extends GetxController {
     receiverEmail.value = receiver.email!;
     receiverName.value = receiver.name!;
     receiverPhoto.value = receiver.image!;
+    receiverToken.value = receiver.token!;
   }
 
   void sendChat(String chat) {

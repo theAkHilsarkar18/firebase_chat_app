@@ -58,7 +58,4 @@ class FirebaseMessagingServices {
       platformChannelSpecifics,
     );
   }
-
-
-  }
 }
