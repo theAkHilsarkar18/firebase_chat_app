@@ -15,6 +15,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// create background message handler to handle background message.
+
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   if (kDebugMode) {
@@ -36,8 +38,13 @@ Future<void> main() async {
   );
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessagingServices.firebaseMessagingServices.onMessageListener();
+  
+  // call onBackgroundMessage from FirebaseMessagni and pass background message handler which above created
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  
   // await GetServerToken.instance.getServerToken();
+  // Server token refresh on every hour so you can set it for refresh periodically or
+  // uncomment getServerToken() and call each time the app built - preferable
   runApp(const ChatApp());
 }
 
