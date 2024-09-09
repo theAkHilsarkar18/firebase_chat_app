@@ -39,7 +39,7 @@ Future<void> main() async {
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessagingServices.firebaseMessagingServices.onMessageListener();
   
-  // call onBackgroundMessage from FirebaseMessagni and pass background message handler which above created
+  // call onBackgroundMessage from Firebase Messaging and pass background message handler which above created
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   
   // await GetServerToken.instance.getServerToken();

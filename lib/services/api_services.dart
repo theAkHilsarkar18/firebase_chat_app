@@ -27,7 +27,7 @@ class ApiServices {
       Uri.parse(baseUrl),
       headers: <String, String>{
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer ${GetServerToken.instance.getServerToken()}}',
+        'Authorization': 'Bearer $generatedToken',
       },
       body: dataNotification,
     );
@@ -40,5 +40,4 @@ class ApiServices {
   }
 }
 
-String generatedToken =
-    "ya29.c.c0ASRK0GZ3iV3e2NFCv3pFEB-mWYh35sdVNG-K0luZN6AWInLUUQHNZR79e_l6xIMwFl4iyx7VL9bBEnyJBN2-NWNVWFFo6tNuN3QJ-UknpxYz_IFsBYBdwfhEzeZiFXRnJ_NI-3RuDQXrBwd_w7Z5oAwXQktY4boKYWxcZ7NsJ1MEiygn7kAaHh2MXzM-tuuUMBrAm5H1EONGBItlN4biWf3R4ij11FxB3UZdfs0DFReBo-JATIaQt3lAN1FpsgPissw7LslRFR6RyVaxN5lrSfvEuHC1Nowa7P-0Ud2bBqEVahfyf5YfgXhZmggBpl7M2iPkW-CwD8T2zpnfb0zhZWWkm0YDPq0qhjJVHNhluUixN1XjNsBrYeExN385Pw5bV7346OSlB4yoQbRXduB1aSxQ_Y8nudR4YWdFBz-xlwvB9XI4JV9h4vxhovuhOexpaw73UrxUu2XpgmdMx0O-xohxZtvSaFmwk5qxrvYlZi9VO-b44Bpz5_leBQt32Q7pMbOZuxddyvqOn_s-u55XvOXYwpVZdy_ZuIpBd2tU5_shi4JVh-u0nSf0lftrBhWcjlaFs-94yWOR5OqlsX-mJ5ltqbIaxySRBhmidUY-7bjM95ssjnb_4ivqM662latUydMzOQqyfmxQwFId9dZ4u0lMe0VM17mm1ns_S1nu62u6uXbZjRhwzYw5bJRkqlVBclviJhbz8jnl_Z21OpWob21OoikbX9RzUauQFwB0nBMdut0qSQ75msjSbmSMWY_687lcsoOcl3jyznWQect9156Z8JRZFZe-oOJJhlpS9lMQaj7XvqIYgViy-btYh6vUuRIJh_dY_OfhnqB3qX-vclhovlMxSW5dVQUrs0X8qoegmbtk_ZZqbUk0hl50JhZW2aJ7u4kfgIs5V1zFyIolBjVyxYJQ0bgi3QoWxJmnzaqd5e1VaRRiqsIvZQ6afdx0BWqF4zq3-JY7tsY4abkBVZj9Q6iSe5iqJ2FbR1RROyns4a9OM-uii0M";
+String generatedToken = "ya29.a0AcM612zUrUHdDzFQKoXBOVywkdPysYG1imMhiLTnYQ-ajfBkIlLDcL_SroI991J_6Po_Dohlc1l4CJ6wl8KCJrsBbnEKrbAP3SgK8lNkQY5AqI8LY__TBsHBGuCmUkSO6AV9EFz7WOwDUPOTDXeP8EMmEIGrBbtmVVpS1WRXaCgYKATUSARESFQHGX2MiP8IEw2pqXNMtVrgSqeP_Kw0175";
