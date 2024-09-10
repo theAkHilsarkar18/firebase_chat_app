@@ -45,6 +45,7 @@ Future<void> main() async {
   // await GetServerToken.instance.getServerToken();
   // Server token refresh on every hour so you can set it for refresh periodically or
   // uncomment getServerToken() and call each time the app built - preferable
+  // or generate token from postman if error occur while generating server token
   runApp(const ChatApp());
 }
 
