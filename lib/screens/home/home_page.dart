@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_chat_app/controllers/chat_controller.dart';
 import 'package:firebase_chat_app/controllers/home_controller.dart';
 import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
@@ -9,11 +11,57 @@ import 'package:firebase_chat_app/services/notification_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomePage extends StatelessWidget {
+import '../../controllers/main_controller.dart';
+
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    log("On Init Called !");
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    log("On Dispose Called !");
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    // TODO: implement didChangeAppLifecycleState
+    super.didChangeAppLifecycleState(state);
+    if (state == AppLifecycleState.resumed) {
+      log("On Resume Called !");
+    } else if (state == AppLifecycleState.inactive) {
+      log("On Inactive Called !");
+    } else if (state == AppLifecycleState.paused) {
+      log("On Pause Called !");
+    } else if (state == AppLifecycleState.detached) {
+      log("On Detached Called !");
+    }
+  }
+
+  @override
+  void deactivate() {
+    // TODO: implement deactivate
+    super.deactivate();
+    log("On Deactivate Called !");
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // Get.put(MainController());
     var controller = Get.put(HomeController());
     return SafeArea(
       child: Scaffold(

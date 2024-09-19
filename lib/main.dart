@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:firebase_chat_app/controllers/main_controller.dart';
 import 'package:firebase_chat_app/firebase_options.dart';
 import 'package:firebase_chat_app/screens/auth/auth_manager.dart';
 import 'package:firebase_chat_app/screens/auth/sign_in.dart';
@@ -38,10 +39,10 @@ Future<void> main() async {
   );
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessagingServices.firebaseMessagingServices.onMessageListener();
-  
+
   // call onBackgroundMessage from Firebase Messaging and pass background message handler which above created
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  
+
   // await GetServerToken.instance.getServerToken();
   // Server token refresh on every hour so you can set it for refresh periodically or
   // uncomment getServerToken() and call each time the app built - preferable
