@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_chat_app/controllers/chat_controller.dart';
@@ -6,8 +7,10 @@ import 'package:firebase_chat_app/screens/home/components/live_user_list.dart';
 import 'package:firebase_chat_app/services/api_services.dart';
 import 'package:firebase_chat_app/services/chat_services.dart';
 import 'package:firebase_chat_app/services/notification_helper.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../model/chat_model.dart';
 
@@ -21,11 +24,19 @@ class ChatPage extends StatelessWidget {
       child: Scaffold(
         extendBodyBehindAppBar: true,
         appBar: AppBar(
+          leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.grey,
+              )),
           backgroundColor: Colors.transparent,
           title: Obx(
             () => Text(
               chatController.receiverName.value,
-              style: const TextStyle(fontSize: 15),
+              style: const TextStyle(fontSize: 15, color: Colors.grey),
             ),
           ),
           actions: [
@@ -37,18 +48,18 @@ class ChatPage extends StatelessWidget {
                 onPressed: () async {},
                 icon: const Icon(
                   Icons.more_vert,
-                  color: Colors.black,
+                  color: Colors.grey,
                 ))
           ],
         ),
         body: Container(
           width: double.infinity,
           decoration: const BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('assets/img/chatBg.png'),
-            ),
-          ),
+              // image: DecorationImage(
+              //   fit: BoxFit.cover,
+              //   image: AssetImage('assets/img/chatBg.png'),
+              // ),
+              color: Colors.black),
           child: Column(
             children: [
               const SizedBox(
@@ -94,47 +105,108 @@ class ChatPage extends StatelessWidget {
                                 ? MainAxisAlignment.end
                                 : MainAxisAlignment.start,
                             children: [
-                              Flexible(
-                                child: GestureDetector(
-                                  onDoubleTap: () {
-                                    ChatServices.chatServices.deleteChat(
-                                        chatController.sender.value,
-                                        chatController.receiverEmail.value);
-                                  },
-                                  child: Container(
-                                    // width: 250,
-                                    margin: EdgeInsets.only(
-                                        left: (chatList[index].sender ==
-                                                chatController
-                                                    .receiverEmail.value)
-                                            ? 8
-                                            : 50,
-                                        top: 8,
-                                        bottom: 8,
-                                        right: (chatList[index].sender ==
-                                                chatController
-                                                    .receiverEmail.value)
-                                            ? 50
-                                            : 8),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 8),
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white12,
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(10),
-                                        topLeft: Radius.circular(10),
-                                        topRight: Radius.circular(10),
+                              chatList[index].image.isNotEmpty
+                                  ? Flexible(
+                                      child: GestureDetector(
+                                        onDoubleTap: () {
+                                          ChatServices.chatServices.deleteChat(
+                                              chatController.sender.value,
+                                              chatController
+                                                  .receiverEmail.value);
+                                        },
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: [
+                                            Image.network(
+                                                height: 200,
+                                                chatList[index].image),
+                                            Container(
+                                              // width: 250,
+                                              margin: EdgeInsets.only(
+                                                  left:
+                                                      (chatList[index].sender ==
+                                                              chatController
+                                                                  .receiverEmail
+                                                                  .value)
+                                                          ? 8
+                                                          : 50,
+                                                  top: 8,
+                                                  bottom: 8,
+                                                  right:
+                                                      (chatList[index].sender ==
+                                                              chatController
+                                                                  .receiverEmail
+                                                                  .value)
+                                                          ? 50
+                                                          : 8),
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 15,
+                                                      vertical: 8),
+                                              decoration: const BoxDecoration(
+                                                color: Colors.white12,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(10),
+                                                  topLeft: Radius.circular(10),
+                                                  topRight: Radius.circular(10),
+                                                ),
+                                              ),
+                                              child: Text(
+                                                chatList[index].message,
+                                                softWrap: true,
+                                                style: const TextStyle(
+                                                    color: Colors.white),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  : Flexible(
+                                      child: GestureDetector(
+                                        onDoubleTap: () {
+                                          ChatServices.chatServices.deleteChat(
+                                              chatController.sender.value,
+                                              chatController
+                                                  .receiverEmail.value);
+                                        },
+                                        child: Container(
+                                          // width: 250,
+                                          margin: EdgeInsets.only(
+                                              left: (chatList[index].sender ==
+                                                      chatController
+                                                          .receiverEmail.value)
+                                                  ? 8
+                                                  : 50,
+                                              top: 8,
+                                              bottom: 8,
+                                              right: (chatList[index].sender ==
+                                                      chatController
+                                                          .receiverEmail.value)
+                                                  ? 50
+                                                  : 8),
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 15, vertical: 8),
+                                          decoration: const BoxDecoration(
+                                            color: Colors.white12,
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(10),
+                                              topLeft: Radius.circular(10),
+                                              topRight: Radius.circular(10),
+                                            ),
+                                          ),
+                                          child: Text(
+                                            chatList[index].message,
+                                            softWrap: true,
+                                            style: const TextStyle(
+                                                color: Colors.white),
+                                          ),
+                                        ),
                                       ),
                                     ),
-                                    child: Text(
-                                      chatList[index].message,
-                                      softWrap: true,
-                                      style:
-                                          const TextStyle(color: Colors.white),
-                                    ),
-                                  ),
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -157,37 +229,67 @@ class ChatPage extends StatelessWidget {
                   cursorColor: Colors.black45,
                   decoration: InputDecoration(
                     border: InputBorder.none,
-                    suffixIcon: IconButton.filled(
-                      color: Colors.white54,
-                      style: const ButtonStyle(
-                        backgroundColor: WidgetStatePropertyAll(
-                          Colors.black26,
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton.filled(
+                          color: Colors.grey,
+                          style: const ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              Colors.black,
+                            ),
+                          ),
+                          onPressed: () async {
+                            XFile? image = await ImagePicker()
+                                .pickImage(source: ImageSource.gallery);
+                            if (image != null) {
+                              final storageRef = FirebaseStorage.instance.ref();
+                              final imageRef =
+                                  storageRef.child("images/${image.name}");
+                              await imageRef.putFile(File(image.path));
+                              String downloadUrl =
+                                  await imageRef.getDownloadURL();
+                              chatController.getImageUrl(downloadUrl);
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.image_outlined,
+                          ),
                         ),
-                      ),
-                      onPressed: () async {
-                        chatController.sendChat(txtChat.text);
-                        Chat chat = Chat.fromMap({
-                          'sender': chatController.sender.value,
-                          'receiver': chatController.receiverEmail.value,
-                          'message': txtChat.text,
-                          'timestamp': Timestamp.now(),
-                        });
+                        IconButton.filled(
+                          color: Colors.grey,
+                          style: const ButtonStyle(
+                            backgroundColor: WidgetStatePropertyAll(
+                              Colors.black,
+                            ),
+                          ),
+                          onPressed: () async {
+                            chatController.sendChat(txtChat.text);
+                            Chat chat = Chat(
+                              timestamp: Timestamp.now(),
+                              message: txtChat.text,
+                              sender: chatController.sender.value,
+                              image: chatController.imageUrl.value,
+                              receiver: chatController.receiverEmail.value,
+                            );
 
-                        await ChatServices.chatServices.addChatToFirestore(
-                            chat,
-                            chatController.sender.value,
-                            chatController.receiverEmail.value);
-                        // NotificationHelper.notificationHelper.showNotification(
-                        //     chatController.sender.value, txtChat.text);
-                        ApiServices.apiServices.pushNotification(
-                            title: chatController.sender.value,
-                            body: txtChat.text,
-                            token: chatController.receiverToken.value);
-                        txtChat.clear();
-                      },
-                      icon: const Icon(
-                        Icons.arrow_forward,
-                      ),
+                            await ChatServices.chatServices.addChatToFirestore(
+                                chat,
+                                chatController.sender.value,
+                                chatController.receiverEmail.value);
+                            // NotificationHelper.notificationHelper.showNotification(
+                            //     chatController.sender.value, txtChat.text);
+                            ApiServices.apiServices.pushNotification(
+                                title: chatController.sender.value,
+                                body: txtChat.text,
+                                token: chatController.receiverToken.value);
+                            txtChat.clear();
+                          },
+                          icon: const Icon(
+                            Icons.arrow_forward,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),

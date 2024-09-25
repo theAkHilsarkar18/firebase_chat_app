@@ -4,12 +4,14 @@ class Chat {
   final String message;
   final String sender;
   final String receiver;
+  final String image;
   final Timestamp timestamp;
 
   Chat({
     required this.timestamp,
     required this.message,
     required this.sender,
+    required this.image,
     required this.receiver,
   });
 
@@ -19,6 +21,7 @@ class Chat {
       'receiver': receiver,
       'message': message,
       'timestamp': timestamp,
+      'image': image,
     };
   }
 
@@ -28,6 +31,7 @@ class Chat {
       receiver: map['receiver'],
       message: map['message'],
       timestamp: map['timestamp'],
+      image: map['image'],
     );
   }
 }

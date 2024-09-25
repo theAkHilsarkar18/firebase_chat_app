@@ -10,6 +10,11 @@ class ChatController extends GetxController {
   RxString receiverPhoto = ''.obs;
   RxString receiverName = ''.obs;
   RxString receiverToken = ''.obs;
+  RxString imageUrl = ''.obs;
+
+  void getImageUrl(String url) {
+    imageUrl.value = url;
+  }
 
   void getSenderAndReceiver(UserModel receiver) {
     User? user = LocalAuthServices.localAuthServices.getCurrentUser();
